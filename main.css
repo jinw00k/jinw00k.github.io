@@ -1,0 +1,79 @@
+/* 배경: 다락방 이미지 + 비네트 + 노이즈 */
+:root{
+  --overlay:#000000a6;
+  --accent:#ffd562;
+  --accent-shadow:#8a6b1a;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: 'Press Start 2P', system-ui, -apple-system, 'Noto Sans KR', sans-serif;
+  color:#f7f4ea;
+  overflow:hidden;
+}
+
+/* 배경 이미지: assets/attic.jpg 를 프로젝트에 넣어주세요 */
+.bg {
+  position: fixed;
+  inset: 0;
+  background: 
+    linear-gradient(#000000a0, #000000a0),
+    url("./assets/attic-bg.png") center/cover no-repeat;
+  background-attachment: fixed;
+}
+.bg::after{
+  /* 필름 노이즈 느낌 */
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,\
+  <svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'>\
+    <filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .06 0'/></filter>\
+    <rect width='100%' height='100%' filter='url(%23n)'/>\
+  </svg>");
+  opacity:.8; mix-blend-mode:overlay;
+}
+
+.hero{
+  position:relative; height:100dvh; width:100%;
+  display:grid; place-items:center;
+  text-align:center; padding:4vh 4vw;
+}
+
+.title{
+  /* 큼직하게: 화면 폭/높이에 따라 유연하게 */
+  font-size: clamp(42px, 8vw, 110px);
+  line-height:1.05; letter-spacing: .02em;
+  margin: 0 0 clamp(28px, 5vh, 64px);
+  font-family: 'VT323', monospace;           /* 좀 더 레트로 느낌 섞기 */
+  color: var(--accent);
+  text-shadow:
+    0 2px 0 #000,
+    0 6px 18px rgba(0,0,0,.6),
+    0 0 36px rgba(255,213,98,.22),
+    0 0 64px rgba(255,213,98,.12);
+}
+
+/* 버튼: 간격 넉넉하게, 누르면 살짝 눌리는 느낌 */
+.cta{
+  display:inline-block;
+  margin-top:0;
+  padding: clamp(12px, 2.2vh, 16px) clamp(18px, 3.2vw, 28px);
+  border:2px solid #e8d4a6;
+  border-radius: 12px;
+  background: rgba(20,12,0,.35);
+  backdrop-filter: blur(2px);
+  color:#ffe9b0; text-decoration:none;
+  font-size: clamp(16px, 2.2vw, 20px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.15),
+    0 10px 30px rgba(0,0,0,.45);
+  transition: transform .06s ease, box-shadow .2s ease, background .2s ease;
+}
+.cta:hover{ background: rgba(20,12,0,.5); }
+.cta:active{ transform: translateY(2px); }
+
+/* 작은 화면에서도 제목/버튼 사이 간격 충분히 */
+@media (max-width:540px){
+  .title{ margin-bottom: 48px; }
+}
