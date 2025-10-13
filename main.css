@@ -41,39 +41,46 @@ body{
 }
 
 .title{
-  /* 큼직하게: 화면 폭/높이에 따라 유연하게 */
-  font-size: clamp(42px, 8vw, 110px);
-  line-height:1.05; letter-spacing: .02em;
-  margin: 0 0 clamp(28px, 5vh, 64px);
-  font-family: 'VT323', monospace;           /* 좀 더 레트로 느낌 섞기 */
+  font-size: clamp(48px, 9.5vw, 120px);   /* ← 폰트 더 키움 */
+  line-height:1.04;
+  margin: 0 0 clamp(36px, 6vh, 72px);     /* ← 제목-버튼 간격 넓힘 */
+  font-family: 'VT323', monospace;
   color: var(--accent);
   text-shadow:
     0 2px 0 #000,
-    0 6px 18px rgba(0,0,0,.6),
-    0 0 36px rgba(255,213,98,.22),
-    0 0 64px rgba(255,213,98,.12);
+    0 10px 24px rgba(0,0,0,.6),
+    0 0 40px rgba(255,213,98,.22);
 }
 
-/* 버튼: 간격 넉넉하게, 누르면 살짝 눌리는 느낌 */
+/* 버튼 2개 가로 배치 + 넓은 간격 */
+.cta-row{
+  display:flex; gap: clamp(14px, 4vw, 28px);
+  flex-wrap:wrap; justify-content:center;
+}
 .cta{
   display:inline-block;
-  margin-top:0;
-  padding: clamp(12px, 2.2vh, 16px) clamp(18px, 3.2vw, 28px);
+  padding: clamp(12px, 2.2vh, 16px) clamp(22px, 3.6vw, 32px);
   border:2px solid #e8d4a6;
   border-radius: 12px;
   background: rgba(20,12,0,.35);
   backdrop-filter: blur(2px);
   color:#ffe9b0; text-decoration:none;
-  font-size: clamp(16px, 2.2vw, 20px);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.15),
-    0 10px 30px rgba(0,0,0,.45);
+  font-size: clamp(16px, 2.2vw, 22px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 10px 30px rgba(0,0,0,.45);
   transition: transform .06s ease, box-shadow .2s ease, background .2s ease;
 }
 .cta:hover{ background: rgba(20,12,0,.5); }
 .cta:active{ transform: translateY(2px); }
 
-/* 작은 화면에서도 제목/버튼 사이 간격 충분히 */
+/* 색 변형(블랙잭 버튼) */
+.cta.alt{
+  border-color:#c6e0ff;
+  color:#e6f3ff;
+  background: rgba(0,14,40,.35);
+}
+.cta.alt:hover{ background: rgba(0,14,40,.55); }
+
+/* 작은 화면에서도 간격 확보 */
 @media (max-width:540px){
-  .title{ margin-bottom: 48px; }
+  .title{ margin-bottom: 52px; }
 }
