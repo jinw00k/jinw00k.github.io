@@ -84,3 +84,13 @@ body{
 @media (max-width:540px){
   .title{ margin-bottom: 52px; }
 }
+
+/* 벽돌깨기 버튼 색상 */
+.cta.alt2 {
+  border-color: #b9f27c;
+  color: #e6ffe6;
+  background: rgba(14, 40, 0, .35);
+}
+.cta.alt2:hover {
+  background: rgba(14, 40, 0, .55);
+}
