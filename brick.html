@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>벽돌깨기 — 진욱이의 잡동사니</title>
+  <link rel="stylesheet" href="brick.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <a class="back" href="index.html">← 메인</a>
+      <h1>벽돌깨기</h1>
+      <div class="hud">
+        <span id="score">점수 0</span>
+        <span id="lives">목숨 3</span>
+        <span id="level">레벨 1</span>
+      </div>
+    </header>
+
+    <section class="board">
+      <canvas id="game" width="480" height="640" aria-label="벽돌깨기 게임"></canvas>
+      <div id="overlay" class="overlay hidden">
+        <div class="box">
+          <h2 id="ov-title">시작</h2>
+          <p id="ov-msg">마우스를 좌우로 움직여 발판을 조종하세요.<br>스페이스키: 일시정지/계속, R: 재시작</p>
+          <button id="btnStart">게임 시작</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="tip">
+      <small>마우스 좌우로 발판을 움직입니다. 모바일에서는 화면을 드래그해 보세요.</small>
+    </footer>
+  </main>
+
+  <script src="brick.js"></script>
+</body>
+</html>
