@@ -1,0 +1,129 @@
+:root{
+  --bg:#0b1020; --app:#0f1530; --card:#121a3a; --ring:#2a3a72;
+  --text:#eaf0ff; --muted:#9aa3b2; --primary:#5a8cff; --good:#3ddc97; --bad:#ff6b6b;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background: radial-gradient(1200px 600px at 20% -10%, #1a2454 0, transparent 70%),
+              radial-gradient(1000px 500px at 100% 0, #0f1737 0, transparent 60%),
+              var(--bg);
+  color:var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans KR", Roboto, Arial;
+}
+
+/* 스마트폰 프레임 */
+.phone{
+  max-width: 420px;
+  margin: 16px auto;
+  border: 1px solid #222b55;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+  background: #0a0f25;
+}
+
+/* 상태바 */
+.statusbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 10px 14px; color:#cdd6ff; font-size:12px; letter-spacing:.02em;
+  background: #0a1028;
+}
+.statusbar .dots span{
+  display:inline-block; width:6px; height:6px; margin-right:4px; border-radius:50%; background:#3a4a88;
+}
+.statusbar .clock{font-weight:700}
+.statusbar .icons{opacity:.8}
+
+/* 앱 */
+.app{
+  background: linear-gradient(180deg, #0d1330, #0a0f26);
+  min-height: calc(100dvh - 60px);
+  padding: 12px 14px 18px;
+}
+.app-header{
+  display:grid; grid-template-columns:auto 1fr auto; align-items:center;
+  gap:10px; margin-bottom:10px;
+}
+.app-header h1{margin:0; font-size:16px; text-align:center; letter-spacing:.02em}
+.app-header .actions{display:flex; gap:6px}
+.back,.ghost{
+  display:inline-block; padding:6px 10px; border-radius:10px; text-decoration:none;
+  color:#cfe0ff; border:1px solid #253568; background:transparent; cursor:pointer;
+}
+
+/* 요약 박스 */
+.portfolio{
+  display:grid; grid-template-columns: repeat(3,1fr);
+  gap:8px; margin-bottom:8px;
+  background: #0e1535; border:1px solid var(--ring); border-radius:14px; padding:10px;
+}
+.metric .label{font-size:12px; color:var(--muted)}
+.metric .value{font-size:18px; font-weight:800}
+
+/* 설명 */
+.notice{
+  margin:6px 0 10px; color:#bfd0ff; font-size:12px;
+}
+
+/* 종목 리스트 */
+.list{display:grid; gap:10px}
+.card{
+  background: var(--card);
+  border:1px solid var(--ring);
+  border-radius:14px;
+  padding:12px;
+}
+.row{
+  display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center;
+}
+.card .name{font-weight:800; letter-spacing:.02em}
+.card .code{font-size:12px; color:var(--muted)}
+.price{font-weight:800; font-size:18px}
+.delta{font-size:12px}
+.delta.up{color: var(--good)}
+.delta.down{color: var(--bad)}
+.controls{
+  display:grid; grid-template-columns: 1fr 1fr auto auto; gap:8px; margin-top:8px;
+}
+input[type="number"]{
+  width:100%; padding:10px 10px; border-radius:10px; border:1px solid #2a3a72;
+  background:#0d1330; color:var(--text);
+}
+.btn{
+  padding:10px 12px; border:0; border-radius:10px; font-weight:700; cursor:pointer;
+  background:#1a2358; color:#eaf0ff; border:1px solid #2a3a72;
+}
+.btn.buy{ background: linear-gradient(180deg, #4aa6ff, #3c7cff); border-color:#345ed1; }
+.btn.sell{ background: linear-gradient(180deg, #ff7e7e, #ff5555); border-color:#b33c3c; }
+.btn:active{ transform: translateY(1px); }
+
+.footer-note{ margin-top:12px; color:#8ea0d8; text-align:center; font-size:12px }
+.right{text-align:right}
+
+/* 스파크라인 */
+.spark{margin-top:8px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
+.spark canvas{display:block;width:100%;height:36px;border-radius:8px;background:#0d1330;border:1px solid #1f2c5a}
+.spark .minmax{font-size:11px;color:#94a3c4;text-align:right;line-height:1.2}
+
+/* 거래내역 바텀시트 */
+.sheet{
+  position:fixed; left:0; right:0; bottom:0;
+  transform:translateY(105%); transition:transform .24s ease; z-index:50;
+  background:#0f1530; border-top-left-radius:18px; border-top-right-radius:18px;
+  border:1px solid #253568; box-shadow:0 -20px 60px rgba(0,0,0,.45)
+}
+.sheet.show{transform:translateY(0)}
+.sheet.hidden{display:block}
+.sheet-handle{width:44px;height:6px;border-radius:999px;background:#33436b;margin:10px auto;cursor:pointer}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:4px 14px 8px}
+.sheet-head h2{font-size:16px;margin:0}
+.sheet-body{max-height:55vh;overflow:auto;padding:0 10px 12px}
+.ledger-item{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;border-bottom:1px dashed #24305a;padding:10px 4px}
+.badge{font-size:12px;font-weight:800;border-radius:8px;padding:4px 8px}
+.badge.buy{background:#173566;color:#cfe0ff;border:1px solid #345ed1}
+.badge.sell{background:#4b1717;color:#ffe1e1;border:1px solid #b33c3c}
+.ledger-meta{font-size:12px;color:#9aa3b2}
+.ledger-amt{font-weight:800}

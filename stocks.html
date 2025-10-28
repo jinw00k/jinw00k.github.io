@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>주식 게임 — 진욱이의 잡동사니</title>
+  <link rel="stylesheet" href="stocks.css" />
+</head>
+<body>
+  <div class="phone">
+    <header class="statusbar">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="clock" id="clock">--:--</div>
+      <div class="icons">LTE ▴▴▴ 🔋</div>
+    </header>
+
+    <main class="app">
+      <div class="app-header">
+        <a class="back" href="index.html" aria-label="뒤로">←</a>
+        <h1>진욱 증권 (모의)</h1>
+        <div class="actions">
+          <button id="ledgerBtn" class="ghost">거래내역</button>
+          <button id="resetBtn" class="ghost">리셋</button>
+        </div>
+      </div>
+
+      <section class="portfolio">
+        <div class="metric"><div class="label">총자산</div><div class="value" id="totalValue">₩ -</div></div>
+        <div class="metric"><div class="label">수익률</div><div class="value" id="returnPct">- %</div></div>
+        <div class="metric"><div class="label">현금</div><div class="value" id="cash">₩ -</div></div>
+      </section>
+
+      <section class="notice">
+        <small>가격은 <b>정시(매 1시간)</b>마다 ±1% 변동합니다. (브라우저가 꺼져 있어도 경과 시간만큼 반영)</small>
+      </section>
+
+      <section id="list" class="list"><!-- 종목 카드가 JS로 채워짐 --></section>
+
+      <section class="footer-note">
+        <small>* 실거래 아님. 삼성증권 <em>풍</em>의 컬러/레이아웃을 참고한 커스텀 UI입니다.</small>
+      </section>
+    </main>
+  </div>
+
+  <!-- 거래내역 바텀시트 -->
+  <div id="sheet" class="sheet hidden" aria-hidden="true">
+    <div class="sheet-handle" id="sheetClose" title="닫기"></div>
+    <div class="sheet-head">
+      <h2>거래내역</h2>
+      <button class="ghost" id="sheetCloseBtn">닫기</button>
+    </div>
+    <div id="sheetBody" class="sheet-body"><!-- 내역 아이템이 JS로 들어옴 --></div>
+  </div>
+
+  <script src="stocks.js"></script>
+</body>
+</html>
