@@ -94,3 +94,13 @@ body{
 .cta.alt2:hover {
   background: rgba(14, 40, 0, .55);
 }
+
+/* 주식 게임 버튼 색상 */
+.cta.alt3 {
+  border-color:#7fb0ff;
+  color:#e6f3ff;
+  background: rgba(0, 32, 96, .35);
+}
+.cta.alt3:hover{
+  background: rgba(0, 32, 96, .55);
+}
