@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>블랙잭 — 진욱이의 잡동사니</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="bj.css" />
 </head>
 <body>
@@ -12,13 +11,14 @@
     <header class="top">
       <a href="index.html" class="back">← 메인</a>
       <h1>블랙잭</h1>
+      <div class="wallet">지갑: <span id="bjWallet">₩ -</span></div>
     </header>
 
     <section id="blackjack" class="bj">
       <div class="bj-head">
-        <h2>게임</h2>
+        <div class="rules">한 판: <b>₩30,000</b> (승 1:1, 블랙잭 3:2, 무승부 환불)</div>
         <div class="bj-controls">
-          <button id="bj-new" class="btn">새 게임</button>
+          <button id="bj-new" class="btn">새 게임(₩30,000)</button>
           <button id="bj-hit" class="ghost" disabled>히트</button>
           <button id="bj-stand" class="ghost" disabled>스탠드</button>
           <button id="bj-redeal" class="ghost">덱 섞기</button>
@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <p id="bj-status" class="bj-status" role="status">‘새 게임’을 눌러 시작하세요.</p>
+      <p id="bj-status" class="bj-status" role="status">‘새 게임(₩30,000)’을 누르면 시작합니다.</p>
     </section>
   </main>
 
