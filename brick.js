@@ -347,7 +347,7 @@
     // Early stopping용 변수들
     const WINDOW = 200;       // 최근 200 에피소드 이동평균
     const PATIENCE = 5;       // 개선 없는 구간 5번 허용
-    const MIN_DELTA = 1.0;    // 이 이상 좋아져야 '개선'으로 인정
+    const MIN_DELTA = 0.05;    // 이 이상 좋아져야 '개선'으로 인정
     let rewardHistory = [];
     let bestAvg = -Infinity;
     let noImprove = 0;
@@ -371,12 +371,12 @@
         const bricksAfter = bricks.filter((b) => b.hp > 0).length;
         const destroyed = bricksBefore - bricksAfter;
 
-        let r = -0.01 + destroyed * 1.0;
+        let r = -0.05 + destroyed * 5.0;
 
         const term = rlCheckTerminal();
         if (term.done) {
-          if (term.reason === "clear") r += 100;
-          else if (term.reason === "dead") r -= 100;
+          if (term.reason === "clear") r += 300;
+          else if (term.reason === "dead") r -= 150;
           done = true;
         }
 
