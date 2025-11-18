@@ -16,7 +16,7 @@
   const W = cvs.width;
   const H = cvs.height;
 
-  // 속도 스케일
+  // ★ 속도 스케일
   const SPEED_SCALE = 2;
 
   let running = false;
@@ -26,14 +26,22 @@
   let level = 1;
 
   // RL 상태 플래그
-  let rlTraining = false;     // 강화학습 중
-  let agentPlaying = false;   // 학습된 정책 데모 중
+  let rlTraining = false;     // 강화학습 중인지
+  let agentPlaying = false;   // 학습된 정책 데모 플레이 중인지
 
   const paddle = { w: 80, h: 12, x: W / 2 - 40, y: H - 28, speed: 12 };
   const ball = { r: 7, x: W / 2, y: H / 2, vx: 3.0, vy: -3.6 };
 
   const cfg = { cols: 8, rows: 5, brickW: 48, brickH: 18, gap: 6, offsetTop: 80 };
   let bricks = [];
+
+  // -------- HUD --------
+  function updateHud() {
+    if (!scoreEl || !livesEl || !levelEl) return;
+    scoreEl.textContent = `점수 ${score}`;
+    livesEl.textContent = `목숨 ${lives}`;
+    levelEl.textContent = `레벨 ${level}`;
+  }
 
   // -------- 벽돌 초기화 --------
   function initBricks() {
@@ -122,14 +130,6 @@
     ctx.strokeStyle = "#2a3a72";
     ctx.lineWidth = 2;
     ctx.strokeRect(10, 10, W - 20, H - 20);
-  }
-
-  // HUD 갱신 함수 (반드시 존재해야 함)
-  function updateHud() {
-    if (!scoreEl || !livesEl || !levelEl) return; // 혹시 모를 안전장치
-    scoreEl.textContent = `점수 ${score}`;
-    livesEl.textContent = `목숨 ${lives}`;
-    levelEl.textContent = `레벨 ${level}`;
   }
 
   // -------- 물리 업데이트 --------
@@ -334,7 +334,7 @@
     return { done: false, reason: null };
   }
 
-  async function rlTrain(numEpisodes = 30000) {
+  async function rlTrain(numEpisodes = 100000) {
     if (rlTraining) return;
     rlTraining = true;
     agentPlaying = false;
@@ -343,6 +343,14 @@
     running = false;
     paused = false;
     rlStatus.textContent = "강화학습 시작…";
+
+    // Early stopping용 변수들
+    const WINDOW = 200;       // 최근 200 에피소드 이동평균
+    const PATIENCE = 5;       // 개선 없는 구간 5번 허용
+    const MIN_DELTA = 1.0;    // 이 이상 좋아져야 '개선'으로 인정
+    let rewardHistory = [];
+    let bestAvg = -Infinity;
+    let noImprove = 0;
 
     for (let ep = 1; ep <= numEpisodes && rlTraining; ep++) {
       resetGame();
@@ -391,10 +399,35 @@
       rlStatus.textContent =
         `에피소드 ${ep} | 보상 ${totalReward.toFixed(1)} | ε=${RL.epsilon.toFixed(2)}`;
 
+      // Early stopping용: 최근 보상 기록
+      rewardHistory.push(totalReward);
+      if (rewardHistory.length > WINDOW) {
+        rewardHistory.shift();
+      }
+
+      if (rewardHistory.length === WINDOW) {
+        const avg =
+          rewardHistory.reduce((sum, v) => sum + v, 0) / WINDOW;
+
+        if (avg > bestAvg + MIN_DELTA) {
+          bestAvg = avg;
+          noImprove = 0;
+        } else {
+          noImprove++;
+        }
+
+        if (noImprove >= PATIENCE && RL.epsilon <= 0.10) {
+          rlStatus.textContent =
+            `수렴 감지: 에피소드 ${ep}에서 학습 조기 종료 (이동평균 = ${avg.toFixed(1)})`;
+          break;
+        }
+      }
+
       if (ep % 50 === 0) {
         await new Promise(requestAnimationFrame);
       }
 
+      // 🔥 10000 에피소드마다 데모 플레이
       if (ep % 10000 === 0) {
         await rlDemoEpisode(ep);
       }
@@ -402,7 +435,9 @@
 
     rlTraining = false;
     btnRL.textContent = "강화학습 시작";
-    rlStatus.textContent = "강화학습 종료";
+    if (!rlStatus.textContent.startsWith("수렴 감지")) {
+      rlStatus.textContent = "강화학습 종료";
+    }
   }
 
   async function rlDemoEpisode(ep) {
@@ -510,7 +545,7 @@
 
   btnRL.addEventListener("click", () => {
     if (!rlTraining) {
-      rlTrain(30000);
+      rlTrain(100000);  // 최대 10만 에피소드, 중간에 수렴하면 자동 종료
     } else {
       rlTraining = false;
       rlStatus.textContent = "강화학습 중지 요청됨";
@@ -547,4 +582,3 @@
   );
   loop();
 })();
-
