@@ -124,8 +124,9 @@
     ctx.strokeRect(10, 10, W - 20, H - 20);
   }
 
-  // -------- HUD --------
+  // HUD 갱신 함수 (반드시 존재해야 함)
   function updateHud() {
+    if (!scoreEl || !livesEl || !levelEl) return; // 혹시 모를 안전장치
     scoreEl.textContent = `점수 ${score}`;
     livesEl.textContent = `목숨 ${lives}`;
     levelEl.textContent = `레벨 ${level}`;
