@@ -395,7 +395,7 @@
         await new Promise(requestAnimationFrame);
       }
 
-      if (ep % 1000 === 0) {
+      if (ep % 10000 === 0) {
         await rlDemoEpisode(ep);
       }
     }
@@ -547,3 +547,4 @@
   );
   loop();
 })();
+
