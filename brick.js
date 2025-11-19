@@ -423,6 +423,8 @@
         if (noImprove >= PATIENCE && RL.epsilon <= 0.10) {
           rlStatus.textContent =
             `수렴 감지: 에피소드 ${ep}에서 학습 조기 종료 (이동평균 = ${avg.toFixed(1)})`;
+            earlyStopped = true;
+            earlyStopEp = ep;
           break;
         }
       }
