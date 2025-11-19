@@ -365,7 +365,7 @@
       let done = false;
       let totalReward = 0;
 
-      while (!done && steps < 100000 && rlTraining) {
+      while (!done && rlTraining) {
         const s = rlGetStateKey();
         const a = rlSelectAction(s);
         rlApplyAction(a);
@@ -394,7 +394,7 @@
         q[a] += RL.alpha * td;
 
         totalReward += r;
-        steps++;
+
       }
 
       RL.episodes++;
@@ -614,6 +614,5 @@
   );
   loop();
 })();
-
 
 
