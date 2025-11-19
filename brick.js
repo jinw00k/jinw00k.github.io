@@ -345,7 +345,7 @@
     rlStatus.textContent = "강화학습 시작…";
 
     // Early stopping용 변수들
-    const WINDOW = 7000;       // 최근 7000 에피소드 이동평균
+    const WINDOW = 10000;       // 최근 10000 에피소드 이동평균
     const PATIENCE = 20;       // 개선 없는 구간 20번 허용
     const MIN_DELTA = 0.05;    // 이 이상 좋아져야 '개선'으로 인정
     let rewardHistory = [];
@@ -596,3 +596,4 @@
   );
   loop();
 })();
+
