@@ -365,7 +365,7 @@
       let done = false;
       let totalReward = 0;
 
-      while (!done && steps < 2000 && rlTraining) {
+      while (!done && steps < 100000 && rlTraining) {
         const s = rlGetStateKey();
         const a = rlSelectAction(s);
         rlApplyAction(a);
@@ -375,12 +375,12 @@
         const bricksAfter = bricks.filter((b) => b.hp > 0).length;
         const destroyed = bricksBefore - bricksAfter;
 
-        let r = -0.05 + destroyed * 5.0;
+        let r = -15.0 + destroyed * 5.0;
 
         const term = rlCheckTerminal();
         if (term.done) {
           if (term.reason === "clear") r += 3000;
-          else if (term.reason === "dead") r -= 150;
+          else if (term.reason === "dead") r -= 10000;
           done = true;
         }
 
@@ -596,4 +596,5 @@
   );
   loop();
 })();
+
 
