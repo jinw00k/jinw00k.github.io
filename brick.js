@@ -507,7 +507,7 @@
     } else if (e.key === "r" || e.key === "R") {
       restart();
     }
-  );
+  });
 
   // -------- 유틸/오버레이 --------
   function togglePause() {
@@ -601,3 +601,4 @@
   );
   loop();
 })();
+
