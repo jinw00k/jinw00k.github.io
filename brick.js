@@ -482,18 +482,15 @@
 
     // 종료 이유에 따라 메시지 조금 다르게 표시해도 됨
     if (lastTerm.reason === "clear") {
-     rlStatus.textContent =
-      `에피소드 ${ep} 데모 완료 — 스테이지 클리어! (스텝 ${steps})`;
+      rlStatus.textContent =
+        `에피소드 ${ep} 데모 완료 — 스테이지 클리어! (스텝 ${steps})`;
     } else if (lastTerm.reason === "dead") {
-     rlStatus.textContent =
-      `에피소드 ${ep} 데모 완료 — 공을 놓쳤어요. (스텝 ${steps})`;
+      rlStatus.textContent =
+        `에피소드 ${ep} 데모 완료 — 공을 놓쳤어요. (스텝 ${steps})`;
     } else {
-     rlStatus.textContent =
-      `에피소드 ${ep} 데모 완료 (스텝 ${steps})`;
+      rlStatus.textContent =
+        `에피소드 ${ep} 데모 완료 (스텝 ${steps})`;
     }
-  }
-
-    rlStatus.textContent = `에피소드 ${ep} 데모 완료 (스텝 ${steps})`;
   }
 
   // -------- 입력 --------
