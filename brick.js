@@ -375,11 +375,11 @@
         const bricksAfter = bricks.filter((b) => b.hp > 0).length;
         const destroyed = bricksBefore - bricksAfter;
 
-        let r = -15.0 + destroyed * 5.0;
+        let r = -0.1 + destroyed * 500.0;
 
         const term = rlCheckTerminal();
         if (term.done) {
-          if (term.reason === "clear") r += 3000;
+          if (term.reason === "clear") r += 30000;
           else if (term.reason === "dead") r -= 10000;
           done = true;
         }
@@ -463,17 +463,35 @@
     agentPlaying = true;
 
     let done = false;
+    let lastTerm = { done: false, reason: null };
     let steps = 0;
 
-    while (!done && steps < 2000) {
+    while (!done) {
       await new Promise(requestAnimationFrame);
       const term = rlCheckTerminal();
-      if (term.done) done = true;
+      lastTerm = term;
+      if (term.done) {
+       done = true;
+      }
+      
       steps++;
     }
 
     agentPlaying = false;
     running = false;
+
+    // 종료 이유에 따라 메시지 조금 다르게 표시해도 됨
+    if (lastTerm.reason === "clear") {
+     rlStatus.textContent =
+      `에피소드 ${ep} 데모 완료 — 스테이지 클리어! (스텝 ${steps})`;
+    } else if (lastTerm.reason === "dead") {
+     rlStatus.textContent =
+      `에피소드 ${ep} 데모 완료 — 공을 놓쳤어요. (스텝 ${steps})`;
+    } else {
+     rlStatus.textContent =
+      `에피소드 ${ep} 데모 완료 (스텝 ${steps})`;
+    }
+  }
 
     rlStatus.textContent = `에피소드 ${ep} 데모 완료 (스텝 ${steps})`;
   }
@@ -596,5 +614,6 @@
   );
   loop();
 })();
+
 
 
