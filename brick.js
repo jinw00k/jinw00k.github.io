@@ -344,15 +344,12 @@
     paused = false;
     rlStatus.textContent = "강화학습 시작…";
 
-    // Early stopping용 변수들
-    const WINDOW = 10000;       // 최근 10000 에피소드 이동평균
-    const PATIENCE = 20;       // 개선 없는 구간 20번 허용
-    const MIN_DELTA = 0.05;    // 이 이상 좋아져야 '개선'으로 인정
-    let rewardHistory = [];
-    let bestAvg = -Infinity;
-    let noImprove = 0;
+    // Early stopping: 최고 보상 기준
+    const PATIENCE = 20;       // 근접 상태가 20번 이상 계속되면 종료
+    const THRESHOLD = 100;     // 최고 보상과의 차이가 100 이하
+    let bestReward = -Infinity;
+    let nearBestCount = 0;
 
-    // 🔽 추가: 조기 종료 여부 / 종료 에피소드 기억
     let earlyStopped = false;
     let earlyStopEp = null;
 
@@ -361,7 +358,6 @@
       running = false;
       paused = false;
 
-      let steps = 0;
       let done = false;
       let totalReward = 0;
 
@@ -375,6 +371,7 @@
         const bricksAfter = bricks.filter((b) => b.hp > 0).length;
         const destroyed = bricksBefore - bricksAfter;
 
+        // 🔥 보상 설계 (스케일 크게)
         let r = -0.1 + destroyed * 500.0;
 
         const term = rlCheckTerminal();
@@ -394,7 +391,6 @@
         q[a] += RL.alpha * td;
 
         totalReward += r;
-
       }
 
       RL.episodes++;
@@ -403,31 +399,28 @@
       rlStatus.textContent =
         `에피소드 ${ep} | 보상 ${totalReward.toFixed(1)} | ε=${RL.epsilon.toFixed(2)}`;
 
-      // Early stopping용: 최근 보상 기록
-      rewardHistory.push(totalReward);
-      if (rewardHistory.length > WINDOW) {
-        rewardHistory.shift();
-      }
-
-      if (rewardHistory.length === WINDOW) {
-        const avg =
-          rewardHistory.reduce((sum, v) => sum + v, 0) / WINDOW;
-
-        if (avg > bestAvg + MIN_DELTA) {
-          bestAvg = avg;
-          noImprove = 0;
+      // ----- 최고 보상 기준 early stopping -----
+      if (totalReward > bestReward) {
+        // 새로운 최고 보상 갱신
+        bestReward = totalReward;
+        nearBestCount = 0;
+      } else {
+        // 최고 보상과의 차이가 THRESHOLD 이내면 근접 상태로 간주
+        if (Math.abs(bestReward - totalReward) <= THRESHOLD) {
+          nearBestCount++;
         } else {
-          noImprove++;
-        }
-
-        if (noImprove >= PATIENCE && RL.epsilon <= 0.10) {
-          rlStatus.textContent =
-            `수렴 감지: 에피소드 ${ep}에서 학습 조기 종료 (이동평균 = ${avg.toFixed(1)})`;
-            earlyStopped = true;
-            earlyStopEp = ep;
-          break;
+          nearBestCount = 0;
         }
       }
+
+      if (nearBestCount >= PATIENCE && RL.epsilon <= 0.10) {
+        rlStatus.textContent =
+          `수렴 감지: 에피소드 ${ep}에서 학습 조기 종료 (최고 보상 = ${bestReward.toFixed(1)}, 최근 보상 = ${totalReward.toFixed(1)})`;
+        earlyStopped = true;
+        earlyStopEp = ep;
+        break;
+      }
+      // ---------------------------------------
 
       if (ep % 50 === 0) {
         await new Promise(requestAnimationFrame);
@@ -445,11 +438,10 @@
     if (earlyStopped && earlyStopEp !== null) {
       await rlDemoEpisode(earlyStopEp);
       rlStatus.textContent =
-       `수렴 감지 후 데모 완료 (에피소드 ${earlyStopEp})`;
+        `수렴 감지 후 데모 완료 (에피소드 ${earlyStopEp})`;
     } else {
-      // 평범하게 max episode까지 다 돌았을 때
       if (!rlStatus.textContent.startsWith("수렴 감지")) {
-       rlStatus.textContent = "강화학습 종료";
+        rlStatus.textContent = "강화학습 종료";
       }
     }
   }
@@ -471,16 +463,14 @@
       const term = rlCheckTerminal();
       lastTerm = term;
       if (term.done) {
-       done = true;
+        done = true;
       }
-      
       steps++;
     }
 
     agentPlaying = false;
     running = false;
 
-    // 종료 이유에 따라 메시지 조금 다르게 표시해도 됨
     if (lastTerm.reason === "clear") {
       rlStatus.textContent =
         `에피소드 ${ep} 데모 완료 — 스테이지 클리어! (스텝 ${steps})`;
@@ -517,7 +507,7 @@
     } else if (e.key === "r" || e.key === "R") {
       restart();
     }
-  });
+  );
 
   // -------- 유틸/오버레이 --------
   function togglePause() {
@@ -611,5 +601,3 @@
   );
   loop();
 })();
-
-
