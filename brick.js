@@ -352,6 +352,10 @@
     let bestAvg = -Infinity;
     let noImprove = 0;
 
+    // 🔽 추가: 조기 종료 여부 / 종료 에피소드 기억
+    let earlyStopped = false;
+    let earlyStopEp = null;
+
     for (let ep = 1; ep <= numEpisodes && rlTraining; ep++) {
       resetGame();
       running = false;
@@ -375,7 +379,7 @@
 
         const term = rlCheckTerminal();
         if (term.done) {
-          if (term.reason === "clear") r += 300;
+          if (term.reason === "clear") r += 3000;
           else if (term.reason === "dead") r -= 150;
           done = true;
         }
@@ -435,8 +439,16 @@
 
     rlTraining = false;
     btnRL.textContent = "강화학습 시작";
-    if (!rlStatus.textContent.startsWith("수렴 감지")) {
-      rlStatus.textContent = "강화학습 종료";
+
+    if (earlyStopped && earlyStopEp !== null) {
+      await rlDemoEpisode(earlyStopEp);
+      rlStatus.textContent =
+       `수렴 감지 후 데모 완료 (에피소드 ${earlyStopEp})`;
+    } else {
+      // 평범하게 max episode까지 다 돌았을 때
+      if (!rlStatus.textContent.startsWith("수렴 감지")) {
+       rlStatus.textContent = "강화학습 종료";
+      }
     }
   }
 
