@@ -12,6 +12,7 @@
   // 🔽 RL UI 요소
   const btnRL = document.getElementById("btnRL");
   const rlStatus = document.getElementById("rlStatus");
+  const rlInfo = document.getElementById("rlInfo");
 
   const W = cvs.width;
   const H = cvs.height;
@@ -297,6 +298,7 @@
     const vyDir = ball.vy > 0 ? 1 : 0;
     const rowBin = Math.min(2, Math.floor(cfg.rows / 3));
 
+    // state = (공-패들 상대 위치, 공의 y 방향, 벽돌 행 정보)
     return `${relBin}_${vyDir}_${rowBin}`;
   }
 
@@ -334,6 +336,7 @@
     return { done: false, reason: null };
   }
 
+  // -------- RL 학습 --------
   async function rlTrain(numEpisodes = 100000) {
     if (rlTraining) return;
     rlTraining = true;
@@ -371,7 +374,11 @@
         const bricksAfter = bricks.filter((b) => b.hp > 0).length;
         const destroyed = bricksBefore - bricksAfter;
 
-        // 🔥 보상 설계 (스케일 크게)
+        // 🔥 보상 설계
+        // - step 당 -0.1 (시간 지날수록 패널티)
+        // - 벽돌 1개 깰 때마다 +500
+        // - 스테이지 클리어 시 +30000
+        // - 공을 놓쳐서 종료: -10000
         let r = -0.1 + destroyed * 500.0;
 
         const term = rlCheckTerminal();
@@ -426,8 +433,10 @@
         await new Promise(requestAnimationFrame);
       }
 
-      // 🔥 10000 에피소드마다 데모 플레이
-      if (ep % 10000 === 0) {
+      // 🔥 데모 플레이 시점:
+      //   - 1000번째, 5000번째
+      //   - 그 이후로는 10000 에피소드마다 (10000, 20000, 30000, …)
+      if (ep === 1000 || ep === 5000 || (ep >= 10000 && ep % 10000 === 0)) {
         await rlDemoEpisode(ep);
       }
     }
@@ -446,6 +455,7 @@
     }
   }
 
+  // -------- 데모 에피소드 (끝까지 플레이) --------
   async function rlDemoEpisode(ep) {
     rlStatus.textContent = `에피소드 ${ep} 정책으로 데모 플레이 중…`;
 
@@ -593,12 +603,33 @@
     if (stroke) ctx.stroke();
   }
 
+  // 🔹 RL 설명 텍스트 표시
+  function updateRlInfo() {
+    if (!rlInfo) return;
+    rlInfo.innerHTML = `
+      <strong>🔎 RL 설정</strong><br>
+      <strong>State</strong><br>
+      - 공-패들 상대 위치 (좌/중/우, <code>relBin</code>)<br>
+      - 공의 세로 이동 방향 (위/아래, <code>vyDir</code>)<br>
+      - 벽돌 행 정보 (3단계, <code>rowBin</code>)<br><br>
+      <strong>Action</strong><br>
+      - 0: 패들 왼쪽으로 이동<br>
+      - 1: 정지<br>
+      - 2: 패들 오른쪽으로 이동<br><br>
+      <strong>Reward</strong><br>
+      - 매 step: <code>-0.1</code><br>
+      - 벽돌 1개 파괴: <code>+500</code><br>
+      - 스테이지 클리어: <code>+30000</code><br>
+      - 공을 놓쳐서 종료: <code>-10000</code>
+    `;
+  }
+
   // 초기화
   resetGame();
+  updateRlInfo();  // RL 설명 세팅
   pauseOverlay(
     "시작",
     "마우스를 좌우로 움직여 발판을 조종하세요.<br>스페이스키: 일시정지/계속, R: 재시작"
   );
   loop();
 })();
-
