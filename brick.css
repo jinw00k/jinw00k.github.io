@@ -18,7 +18,7 @@ body{
 }
 
 .wrap{
-  max-width:860px;
+  max-width:1200px;    /* 🔥 좌우 여유 크게 */
   margin:24px auto;
   padding:0 16px;
 }
@@ -28,7 +28,7 @@ body{
   grid-template-columns:auto 1fr auto;
   align-items:center;
   gap:12px;
-  margin-bottom:12px;
+  margin-bottom:18px;
 }
 
 .top h1{
@@ -56,11 +56,18 @@ body{
   justify-content:flex-end;
 }
 
-/* 게임 보드 */
+/* 🔥 게임 + RL 패널을 옆으로 */
+.game-layout{
+  display:flex;
+  flex-direction:row;
+  align-items:flex-start;
+  gap:20px;
+}
+
+/* 🔥 게임 보드는 고정 폭 */
 .board{
   position:relative;
-  margin:auto;
-  width:min(96vw, 520px);
+  width:520px;               /* 🔥 변경: 항상 520px */
   background:linear-gradient(180deg,#0e1430,#0a0f26);
   border:1px solid var(--ring);
   border-radius:14px;
@@ -76,7 +83,49 @@ canvas{
   background:#0b0f22;
 }
 
-/* 오버레이 */
+/* 🔥 RL 패널 오른쪽 고정 폭 */
+.rl-panel{
+  width:260px;            /* ← 이거 없으면 밑으로 떨어짐 */
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  font-size:0.88rem;
+  color:var(--muted);
+}
+
+.btn-rl{
+  padding:8px 14px;
+  border-radius:999px;
+  border:1px solid var(--accent);
+  background:rgba(110,168,254,0.1);
+  color:var(--accent);
+  font-weight:600;
+  cursor:pointer;
+}
+.btn-rl:hover{
+  background:rgba(110,168,254,0.2);
+}
+
+.rl-status{
+  opacity:0.9;
+  font-size:0.83rem;
+}
+
+.rl-info{
+  line-height:1.6;
+  background:#111829;
+  border:1px solid #2a375e;
+  padding:10px 12px;
+  border-radius:8px;
+}
+
+.rl-info code{
+  font-family:ui-monospace, monospace;
+  font-size:0.82rem;
+}
+
+/* ----- 오버레이 ----- */
+
 .overlay{
   position:absolute;
   inset:12px;
@@ -119,81 +168,12 @@ canvas{
   color:#0b1020;
 }
 
-/* 하단 팁 */
-.tip{
-  margin-top:10px;
-  text-align:center;
-  color:var(--muted);
-}
-
-/* RL 패널 */
-.rl-panel{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  margin:6px 0 14px;
-  font-size:0.85rem;
-  color:var(--muted);
-}
-
-/* RL 패널 오른쪽(상태 + 설명 묶음) */
-.rl-right{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
-
-/* 강화학습 버튼 */
-.btn-rl{
-  padding:6px 12px;
-  border-radius:999px;
-  border:1px solid var(--accent);
-  background:rgba(110,168,254,0.1);
-  color:var(--accent);
-  font-weight:600;
-  cursor:pointer;
-}
-.btn-rl:hover{
-  background:rgba(110,168,254,0.2);
-}
-
-/* 상태 텍스트 */
-.rl-status{
-  opacity:0.9;
-  display:block;
-  margin-bottom:4px;
-}
-
-/* RL 설명 텍스트 */
-.rl-info{
-  line-height:1.4;
-}
-
-/* 코드 폰트 */
-.rl-info code{
-  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size:0.8rem;
-}
-
-/* 새로 추가: 게임 + RL 패널을 옆으로 배치 */
-.game-layout{
-  display:flex;
-  align-items:flex-start;
-  gap:16px;
-}
-
-/* flex 안에서는 중앙 정렬 margin:auto 필요 없음 */
-.game-layout .board{
-  margin:0;
-  width: min(70vw, 520px);  /* 옆에 패널 들어갈 자리 조금 남기기 */
-}
-
-/* 작은 화면에서는 다시 위아래로 쌓이게 */
-@media (max-width: 768px){
+/* ----- 모바일에서는 다시 위아래 배치 ----- */
+@media (max-width: 900px){
   .game-layout{
     flex-direction:column;
   }
-  .game-layout .board{
-    width:min(96vw, 520px);
+  .rl-panel{
+    width:100%;
   }
 }
