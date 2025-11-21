@@ -174,3 +174,26 @@ canvas{
   font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size:0.8rem;
 }
+
+/* 새로 추가: 게임 + RL 패널을 옆으로 배치 */
+.game-layout{
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+}
+
+/* flex 안에서는 중앙 정렬 margin:auto 필요 없음 */
+.game-layout .board{
+  margin:0;
+  width: min(70vw, 520px);  /* 옆에 패널 들어갈 자리 조금 남기기 */
+}
+
+/* 작은 화면에서는 다시 위아래로 쌓이게 */
+@media (max-width: 768px){
+  .game-layout{
+    flex-direction:column;
+  }
+  .game-layout .board{
+    width:min(96vw, 520px);
+  }
+}
