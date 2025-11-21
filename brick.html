@@ -18,25 +18,28 @@
       </div>
     </header>
 
-    <!-- 🔽 RL 컨트롤 & 설명 영역 -->
-    <section class="rl-panel">
-      <button id="btnRL" class="btn-rl">강화학습 시작</button>
-      <div class="rl-right">
-        <small id="rlStatus" class="rl-status">대기 중</small>
-        <div id="rlInfo" class="rl-info"></div>
-      </div>
-    </section>
-
-    <section class="board">
-      <canvas id="game" width="480" height="640" aria-label="벽돌깨기 게임"></canvas>
-      <div id="overlay" class="overlay hidden">
-        <div class="box">
-          <h2 id="ov-title">시작</h2>
-          <p id="ov-msg">마우스를 좌우로 움직여 발판을 조종하세요.<br>스페이스키: 일시정지/계속, R: 재시작</p>
-          <button id="btnStart">게임 시작</button>
+    <!-- 🔽 게임 + RL 패널을 나란히 배치하는 영역 -->
+    <div class="game-layout">
+      <section class="board">
+        <canvas id="game" width="480" height="640" aria-label="벽돌깨기 게임"></canvas>
+        <div id="overlay" class="overlay hidden">
+          <div class="box">
+            <h2 id="ov-title">시작</h2>
+            <p id="ov-msg">마우스를 좌우로 움직여 발판을 조종하세요.<br>스페이스키: 일시정지/계속, R: 재시작</p>
+            <button id="btnStart">게임 시작</button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <!-- 🔽 RL 컨트롤 & 설명 패널 (오른쪽) -->
+      <section class="rl-panel">
+        <button id="btnRL" class="btn-rl">강화학습 시작</button>
+        <div class="rl-right">
+          <small id="rlStatus" class="rl-status">대기 중</small>
+          <div id="rlInfo" class="rl-info"></div>
+        </div>
+      </section>
+    </div>
 
     <footer class="tip">
       <small>마우스 좌우로 발판을 움직입니다. 모바일에서는 화면을 드래그해 보세요.</small>
